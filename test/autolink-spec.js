@@ -37,16 +37,16 @@
         rel: "nofollow"
       })).toEqual("Google it: <a href='http://google.com' target='_blank' " + "rel='nofollow'>http://google.com</a>");
     });
-    return describe("limit option", function() {
+    describe("limit option", function() {
       it("removes http", function() {
         return expect("Google it: http://google.com".autoLink({
           limit: 30
         })).toEqual("Google it: <a href='http://google.com'>" + "google.com</a>");
       });
-      it("truncates link if link is longer than limit", function() {
+      it("truncates link if link is longer than limit - omission", function() {
         return expect("Google it: http://google.com/derp/derp/derpderp/derp".autoLink({
           limit: 30
-        })).toEqual("Google it: <a href='http://google.com/derp/derp/derpderp/derp'>" + "google.com/derp/derp/derpderp/...</a>");
+        })).toEqual("Google it: <a href='http://google.com/derp/derp/derpderp/derp'>" + "google.com/derp/derp/derpde...</a>");
       });
       it("does not truncate link if link shorter than limit", function() {
         return expect("Google it: http://google.com".autoLink({
@@ -57,6 +57,14 @@
         return expect("Google it: http://google.com/derp/derpderp/derpd".autoLink({
           limit: 30
         })).toEqual("Google it: <a href='http://google.com/derp/derpderp/derpd'>" + "google.com/derp/derpderp/derpd</a>");
+      });
+    });
+    return describe("omission option", function() {
+      return it("truncates link if link is longer than limit - omission and appends omission end", function() {
+        return expect("Google it: http://google.com/derp/derp/derpderp/derp".autoLink({
+          limit: 30,
+          omission: '***'
+        })).toEqual("Google it: <a href='http://google.com/derp/derp/derpderp/derp'>" + "google.com/derp/derp/derpde***</a>");
       });
     });
   });

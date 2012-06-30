@@ -67,12 +67,12 @@ describe "autolink", ->
         "google.com</a>"
       )
 
-    it "truncates link if link is longer than limit", ->
+    it "truncates link if link is longer than limit - omission", ->
       expect(
         "Google it: http://google.com/derp/derp/derpderp/derp".autoLink(limit: 30)
       ).toEqual(
         "Google it: <a href='http://google.com/derp/derp/derpderp/derp'>" +
-        "google.com/derp/derp/derpderp/...</a>"
+        "google.com/derp/derp/derpde...</a>"
       )
 
     it "does not truncate link if link shorter than limit", ->
@@ -88,4 +88,17 @@ describe "autolink", ->
       .toEqual(
         "Google it: <a href='http://google.com/derp/derpderp/derpd'>" +
         "google.com/derp/derpderp/derpd</a>"
+      )
+
+
+  describe "omission option", ->
+    it "truncates link if link is longer than limit - omission and appends omission end", ->
+      expect(
+        "Google it: http://google.com/derp/derp/derpderp/derp".autoLink(
+          limit: 30
+          omission: '***'
+        )
+      ).toEqual(
+        "Google it: <a href='http://google.com/derp/derp/derpderp/derp'>" +
+        "google.com/derp/derp/derpde***</a>"
       )

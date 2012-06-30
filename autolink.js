@@ -4,14 +4,14 @@
     __slice = [].slice;
 
   autoLink = function() {
-    var key, limit, link_attributes, options, url_pattern, value, _ref;
+    var key, limit, link_attributes, omission, options, url_pattern, value, _ref;
     options = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
     url_pattern = /(\b(https?):\/\/[\-A-Z0-9+&@#\/%?=~_|!:,.;]*[\-A-Z0-9+&@#\/%=~_|])/ig;
     if (options.length > 0) {
-      if (options[0].limit) {
-        limit = options[0].limit;
-        delete options[0].limit;
-      }
+      omission = options[0].omission || '...';
+      delete options[0].omission;
+      limit = options[0].limit;
+      delete options[0].limit;
       link_attributes = '';
       _ref = options[0];
       for (key in _ref) {
@@ -24,7 +24,7 @@
         if (limit) {
           displayUrl = displayUrl.replace(/https?:\/{2}/, '');
           if (displayUrl.length > limit) {
-            displayUrl = "" + (displayUrl.substr(0, limit)) + "...";
+            displayUrl = "" + (displayUrl.substr(0, limit - omission.length)) + omission;
           }
         }
         return "<a href='" + url + "'" + link_attributes + ">" + displayUrl + "</a>";
