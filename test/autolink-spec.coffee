@@ -58,3 +58,34 @@ describe "autolink", ->
       "Google it: <a href='http://google.com' target='_blank' " +
       "rel='nofollow'>http://google.com</a>"
     )
+
+  describe "limit option", ->
+    it "removes http", ->
+      expect("Google it: http://google.com".autoLink(limit: 30))
+      .toEqual(
+        "Google it: <a href='http://google.com'>" +
+        "google.com</a>"
+      )
+
+    it "truncates link if link is longer than limit", ->
+      expect(
+        "Google it: http://google.com/derp/derp/derpderp/derp".autoLink(limit: 30)
+      ).toEqual(
+        "Google it: <a href='http://google.com/derp/derp/derpderp/derp'>" +
+        "google.com/derp/derp/derpderp/...</a>"
+      )
+
+    it "does not truncate link if link shorter than limit", ->
+      expect(
+        "Google it: http://google.com".autoLink(limit: 30)
+      ).toEqual(
+        "Google it: <a href='http://google.com'>" +
+        "google.com</a>"
+      )
+
+    it "does not truncate link if link is limit", ->
+      expect("Google it: http://google.com/derp/derpderp/derpd".autoLink(limit: 30))
+      .toEqual(
+        "Google it: <a href='http://google.com/derp/derpderp/derpd'>" +
+        "google.com/derp/derpderp/derpd</a>"
+      )
