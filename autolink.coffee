@@ -3,6 +3,9 @@ autoLink = (options...) ->
     /(\b(https?):\/\/[\-A-Z0-9+&@#\/%?=~_|!:,.;]*[\-A-Z0-9+&@#\/%=~_|])/ig
 
   if options.length > 0
+    callback = options[0].callback if options[0].callback and Object.prototype.toString.call(options[0].callback) is '[object Function]'
+    delete options[0].callback
+
     omission = options[0].omission || '...'
     delete options[0].omission
 
@@ -15,6 +18,7 @@ autoLink = (options...) ->
       link_attributes += " #{key}='#{value}'"
 
     @replace url_pattern, (match, url) ->
+      return callback(url) if callback and callback(url)
       displayUrl = url
       if limit
         displayUrl = displayUrl.replace /https?:\/{2}/, ''
